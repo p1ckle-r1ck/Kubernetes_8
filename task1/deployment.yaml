@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-multi
+spec:
+  selector:
+    matchLabels:
+      app: nginx-multi
+  template:
+    metadata:
+      labels:
+        app: nginx-multi
+    spec:
+      volumes:
+        - name:  test-vol
+          configMap:
+            name: myconfigmap2
+
+
+      containers:
+      - name: nginx
+        image: nginx:latest
+        resources:
+          # limits:
+          #   memory: "128Mi"
+          #   cpu: "500m"
+        ports:
+        - containerPort: 80
+        env:
+        - name: "HTTP_PORT"
+          valueFrom:
+            configMapKeyRef:
+              name: myconfigmap
+              key: nginx
+        volumeMounts:
+          - name: test-vol
+            mountPath: /usr/share/nginx/html
+        
+      - name: multitool
+        image: wbitt/network-multitool
+        resources:
+          # limits:
+          #   memory: "128Mi"
+          #   cpu: "500m"
+        ports:
+        - containerPort: 81
+        env:
+        - name: "HTTP_PORT"
+          valueFrom:
+            configMapKeyRef:
+              name: myconfigmap
+              key: multitool
+        
