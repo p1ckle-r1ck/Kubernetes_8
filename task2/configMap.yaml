@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-config
+  labels:
+    app: myapplication
+data:
+  index.html: |
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <meta charset="UTF-8">
+    <title>Ваш заголовок</title>
+    </head>
+    <body>
+    <p>Ваш контент здесь</p>
+    </body>
+    </html>
+
+  port: "443"  
+

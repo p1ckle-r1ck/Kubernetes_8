@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        env:
+        - name: "HTTPS_PORT"
+          valueFrom:
+            configMapKeyRef:
+              name:  nginx-config
+              key: port
+        ports:
+          - containerPort: 80
+        volumeMounts:
+          - name: test-vol
+            mountPath:  /usr/share/nginx/html
+
+      volumes:
+        - name: test-vol
+          configMap:
+            name:  nginx-config
